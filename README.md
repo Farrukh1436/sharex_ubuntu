@@ -39,23 +39,30 @@ Paste this content:
 
 ```bash
 #!/bin/bash
-# Flameshot Auto Screenshot with Watermark + Counter
+# Flameshot auto screenshot with name and counter
 
 SAVE_DIR="$HOME/Pictures/Screenshots"
 mkdir -p "$SAVE_DIR"
 
-# Counter-based filename
+# Count existing PNGs to create sequential filenames
 COUNTER=$(ls "$SAVE_DIR"/*.png 2>/dev/null | wc -l)
-FILENAME=$(printf "%s/shot_%03d.png" "$SAVE_DIR" $((COUNTER + 1)))
+FILENAME=$(printf "%s/%03d_shot.png" "$SAVE_DIR" $((COUNTER + 1)))
 
-# Take full screenshot
+# Take full screenshot and save
 flameshot full -p "$FILENAME"
 
-# Add watermark (top center, bold, bordered)
-convert "$FILENAME"   -gravity north   -pointsize 76   -font DejaVu-Sans-Bold   -fill white   -stroke black -strokewidth 3   -annotate +0+40 "Farrukh Sattorov | U2310237 | Section:1 | Member:3"   "$FILENAME"
+convert "$FILENAME" \
+  -gravity north \
+  -pointsize 76 \
+  -font DejaVu-Sans-Bold \
+  -fill white \
+  -stroke black -strokewidth 3 \
+  -annotate +0+40 "Farrukh Sattorov | U2310237 | Section:1 | Member:3" \
+  "$FILENAME"
 
-# Notify user
-notify-send "📸 Screenshot saved as $(basename "$FILENAME")"
+
+# Optional notification
+notify-send "📸 Screenshot saved: $(basename "$FILENAME")"
 ```
 
 Save (`Ctrl + O`, `Enter`) and exit (`Ctrl + X`).
@@ -108,8 +115,43 @@ flameshot gui -p "$SAVE_DIR"
 ```
 Farrukh Sattorov | U2310237 | Section:1 | Member:3
 ```
-
 Appears **bold, white, black-bordered**, and perfectly centered at the top of every screenshot.
+
+---
+
+## 🧾 Example Usages
+
+### 🖼️ Screenshot Preview
+Below is an example of how the watermark appears on the screenshot:
+
+![Example Screenshot](example_output.png)
+
+The text appears **bold**, **white**, and surrounded by a **black border**, aligned perfectly at the **top center**.
+
+---
+
+### 🖥️ Terminal Demo (Optional)
+Record your screen to show the workflow using `peek`:
+
+```bash
+sudo apt install peek
+peek
+```
+
+Then embed it into your README:
+```markdown
+![Demo](demo.gif)
+```
+
+---
+
+### ⚡ Command Usage
+You can also manually run:
+```bash
+~/.local/bin/snap_with_name.sh
+```
+Or use your assigned hotkey (e.g., `Shift + F1`) for instant capture.  
+Each time, a new file (`shot_001.png`, `shot_002.png`, …) is saved to your `~/Pictures/Screenshots` folder.
 
 ---
 
